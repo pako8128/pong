@@ -15,7 +15,7 @@ pub struct Ball {
 impl Ball {
     pub fn new() -> Ball {
         Ball {
-            position: Rect::new(((WIDTH * SQUARE_SIZE) / 2) as i32, ((HEIGHT * SQUARE_SIZE) / 2) as i32, SQUARE_SIZE, SQUARE_SIZE), 
+            position: Rect::new((WIDTH / 2) as i32, (HEIGHT / 2) as i32, SQUARE_SIZE, SQUARE_SIZE), 
             vel_x: 5,
             vel_y: 5,
             color: Color::RGB(255, 255, 255),
@@ -33,13 +33,13 @@ impl Ball {
             self.vel_x *= -1;
         }
 
-        if new_y < 0 || new_y + SQUARE_SIZE as i32 > (SQUARE_SIZE * HEIGHT) as i32 {
+        if new_y < 0 || new_y + SQUARE_SIZE as i32 > HEIGHT as i32 {
             self.vel_y *= -1;
         }
     }
 
     pub fn is_oob(&self) -> bool {
-        self.position.x() < 0 || self.position.x() + SQUARE_SIZE as i32 > (SQUARE_SIZE * WIDTH) as i32
+        self.position.x() < 0 || self.position.x() + SQUARE_SIZE as i32 > WIDTH as i32
     }
 
     pub fn speed_up(&mut self) {
@@ -72,26 +72,34 @@ pub struct Player {
 impl Player {
     pub fn new_left() -> Player {
         Player {
-            position: Rect::new(SQUARE_SIZE as i32, (((HEIGHT - 15) * SQUARE_SIZE) / 2) as i32, SQUARE_SIZE, 15 * SQUARE_SIZE),
+            position: Rect::new(SQUARE_SIZE as i32, ((HEIGHT - 15 * SQUARE_SIZE) / 2) as i32, SQUARE_SIZE, 15 * SQUARE_SIZE),
             color: Color::RGB(255, 255, 255),
         }
     }
 
     pub fn new_right() -> Player {
         Player {
-            position: Rect::new(((WIDTH - 2) * SQUARE_SIZE) as i32, (((HEIGHT - 15) * SQUARE_SIZE) / 2) as i32, SQUARE_SIZE, 15 * SQUARE_SIZE),
+            position: Rect::new((WIDTH - 2 * SQUARE_SIZE) as i32, ((HEIGHT - 15 * SQUARE_SIZE) / 2) as i32, SQUARE_SIZE, 15 * SQUARE_SIZE),
             color: Color::RGB(255, 255, 255),
         }
     }
 
     pub fn move_up(&mut self) {
         let new_position = self.position.y() - MOVING_SPEED;
-        self.position.set_y(new_position);
+        if new_position < 0 {
+            self.position.set_y(0);
+        } else {
+            self.position.set_y(new_position);
+        }
     }
 
     pub fn move_down(&mut self) {
         let new_position = self.position.y() + MOVING_SPEED;
-        self.position.set_y(new_position);
+        if new_position > (HEIGHT - 15 * SQUARE_SIZE) as i32 {
+            self.position.set_y((HEIGHT - 15 * SQUARE_SIZE) as i32);
+        } else {
+            self.position.set_y(new_position);
+        }
     }
 }
 

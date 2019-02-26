@@ -17,7 +17,7 @@ pub struct Display {
 impl Display {
     pub fn new(video: &VideoSubsystem) -> Self {
         let window = video
-            .window("PONG", SQUARE_SIZE * WIDTH, SQUARE_SIZE * HEIGHT)
+            .window("PONG", WIDTH, HEIGHT)
             .position_centered()
             .build()
             .unwrap();
